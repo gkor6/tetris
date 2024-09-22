@@ -1,0 +1,11 @@
+.canvas {
+  width: 40dvh;
+  height: 80dvh;
+}
+
+@media (screen) and (orientation: portrait) {
+  .canvas {
+    width: 100dvw;
+    height: 200dvw;
+  }
+}
