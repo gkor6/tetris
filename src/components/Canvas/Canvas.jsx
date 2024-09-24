@@ -45,6 +45,7 @@ const Canvas = () => {
   const figureType = useRef(null);
   const prevFigureTypes = useRef(null);
   const figureColor = useRef(null);
+  const prevFigureColors = useRef(null);
   const figureRotation = useRef(null);
   const figurePrimaryOffsetX = useRef(null);
   const figureSecondaryOffsetX = useRef(null);
@@ -180,10 +181,17 @@ const Canvas = () => {
     }
     prevFigureTypes.current[prevFigureTypes.current.length - 1] = figureType.current;
 
-    const prevFigureColor = figureColor.current;
-    do {
+    while (true) {
       figureColor.current = FIGURE_COLORS[random(0, FIGURE_COLORS.length - 1)];
-    } while (figureColor.current === prevFigureColor)
+
+      const count = prevFigureColors.current.reduce((prev, cur) => (cur === figureColor.current) ? (prev + 1) : (prev), 0);
+
+      if (count === 0) break;
+    }
+    for (let i = 1; i < prevFigureColors.current.length - 1; i++) {
+      prevFigureColors.current[i] = prevFigureColors.current[i + 1];
+    }
+    prevFigureColors.current[prevFigureColors.current.length - 1] = figureColor.current;
 
     figureRotation.current = 0;
     figurePrimaryOffsetX.current = Math.floor((TILE_COUNT_X - getFigureMatrix()[0].length) / 2) * TILE_LOGICAL_WIDTH;
@@ -207,6 +215,7 @@ const Canvas = () => {
     collapsedRowCount.current = 0;
 
     prevFigureTypes.current = new Array(4);
+    prevFigureColors.current = new Array(4);
     initializeNewFigure();
 
     manualFigureLoweringSeries.current = 0;
