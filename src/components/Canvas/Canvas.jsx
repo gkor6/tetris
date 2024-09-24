@@ -81,6 +81,16 @@ const Canvas = () => {
         break;
     }
 
+    const cloneMatrix = () => {
+      const clone = [];
+
+      for (let partIndex = 0; partIndex < matrix.length; partIndex++) {
+        clone[partIndex] = [...(matrix[partIndex])];
+      }
+
+      return clone;
+    }
+
     const prepareMatrix = (matrixClone) => {
       for (let i = 0; i < matrixClone[0].length; i++) {
         matrix[i] = new Array(matrixClone.length);
@@ -97,7 +107,7 @@ const Canvas = () => {
             break;
           }
 
-          const matrixClone = [...matrix];
+          const matrixClone = cloneMatrix();
 
           matrixClone.forEach((part, partIndex) => {
             const destPartIndex = matrixClone.length - 1 - partIndex;
@@ -112,7 +122,7 @@ const Canvas = () => {
         case 45: {
           if (type !== FIGURE_TYPES.I || type !== FIGURE_TYPES.S || type !== FIGURE_TYPES.Z) { /* otherwise 
           the matrix gets rotated as if the figure rotation is 135 */
-            const matrixClone = [...matrix];
+            const matrixClone = cloneMatrix();
             prepareMatrix(matrixClone);
 
             matrixClone.forEach((part, partIndex) => {
@@ -128,7 +138,7 @@ const Canvas = () => {
           // falls through
         }
         case 135: {
-          const matrixClone = [...matrix];
+          const matrixClone = cloneMatrix();
           prepareMatrix(matrixClone);
 
           matrixClone.forEach((part, partIndex) => {
