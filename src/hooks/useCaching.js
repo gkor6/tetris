@@ -6,7 +6,7 @@ const useCaching = (func) => {
   return useCallback((...args) => {
     let subcache = cache.current;
 
-    outer: for (let i = 0; i < args.length - 1; i++) {
+    for (let i = 0; i < args.length - 1; i++) {
       if (subcache.has(args[i])) {
         subcache = subcache.get(args[i]);
         continue;
@@ -19,7 +19,7 @@ const useCaching = (func) => {
         subcache = newSubcache;
       }
 
-      break outer;
+      break;
     }
 
     const lastArgument = args.at(args.length - 1);
