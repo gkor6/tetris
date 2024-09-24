@@ -43,6 +43,7 @@ const Canvas = () => {
     one tile */
 
   const figureType = useRef(null);
+  const prevFigureTypes = useRef(null);
   const figureColor = useRef(null);
   const figureRotation = useRef(null);
   const figurePrimaryOffsetX = useRef(null);
@@ -166,7 +167,18 @@ const Canvas = () => {
   const isManualFigureLoweringStopNeeded = useRef(null);
 
   const initializeNewFigure = useCallback(() => {
-    figureType.current = random(1, Object.keys(FIGURE_TYPES).length - 1);
+    const figureTypeEntries = Object.entries(FIGURE_TYPES);
+    while (true) {
+      figureType.current = figureTypeEntries[random(0, figureTypeEntries.length - 1)][1];
+
+      const count = prevFigureTypes.current.reduce((prev, cur) => (cur === figureType.current) ? (prev + 1) : (prev), 0);
+
+      if (count < 2) break;
+    }
+    for (let i = 1; i < prevFigureTypes.current.length - 1; i++) {
+      prevFigureTypes.current[i] = prevFigureTypes.current[i + 1];
+    }
+    prevFigureTypes.current[prevFigureTypes.current.length - 1] = figureType.current;
 
     const prevFigureColor = figureColor.current;
     do {
@@ -194,6 +206,7 @@ const Canvas = () => {
 
     collapsedRowCount.current = 0;
 
+    prevFigureTypes.current = new Array(4);
     initializeNewFigure();
 
     manualFigureLoweringSeries.current = 0;
