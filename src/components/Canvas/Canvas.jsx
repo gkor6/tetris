@@ -354,6 +354,34 @@ const Canvas = () => {
     return () => window.removeEventListener('keyup', handleArrowDownUp);
   }, []);
 
+  useEffect(() => {
+    const handleArrowUpDown = (ev) => {
+      if (ev.code !== 'ArrowUp') return;
+
+      figureRotation.current += 45;
+      figureRotation.current %= 180;
+
+      figureSecondaryOffsetX.current = 0;
+
+      if (figureType === FIGURE_TYPES.O) return;
+
+      if (figureRotation.current === 45) {
+        if (figureType.current === FIGURE_TYPES.I) {
+          figureSecondaryOffsetX.current = 2 * TILE_LOGICAL_WIDTH;
+        } else if (figureType.current !== FIGURE_TYPES.S) {
+          figureSecondaryOffsetX.current = TILE_LOGICAL_WIDTH;
+        }
+      } else if (figureRotation.current === 135) {
+        if (figureType.current === FIGURE_TYPES.I || figureType.current === FIGURE_TYPES.S) {
+          figureSecondaryOffsetX.current = TILE_LOGICAL_WIDTH;
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleArrowUpDown);
+    return () => window.removeEventListener('keydown', handleArrowUpDown);
+  }, []);
+
   const adjustCanvasSize = useCallback(() => {
     const { width, height } = canvas.current.getBoundingClientRect();
 
